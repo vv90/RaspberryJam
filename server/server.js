@@ -36,7 +36,7 @@ mongoose.connect('mongodb://localhost/RaspberryJam');
 
 app.use('/api', router);
 app.get('*', function(req, res) {
-	res.sendFile(path.join(__dirname, '../index.html'))
+	res.sendFile(path.join(__dirname, '../app/index.html'));
 });
 
 app.listen(port);
