@@ -8,6 +8,8 @@ const Header = () => {
 	return (
 		<nav className="app-nav">
 			<IndexLink to="/" className="nav-item" activeClassName="nav-item-active">Home</IndexLink>
+			<Link to="/setup" className="nav-item" activeClassName="nav-item-active">Setup</Link>
+			<Link to="/registration" className="nav-item" activeClassName="nav-item-active">Registration</Link>
 			<Link to="/skating" className="nav-item" activeClassName="nav-item-active">Skating</Link>
 		</nav>
 	);

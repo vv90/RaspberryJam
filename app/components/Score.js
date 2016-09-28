@@ -11,7 +11,7 @@ class ScoreCard extends React.Component {
 	}
 
 	selectCard() {
-		this.props.selectCard(this.props.contender, this.props.judge);
+		this.props.selectCard(this.props.competitor, this.props.judge);
 	}
 
 	render() {
@@ -28,7 +28,7 @@ ScoreCard.propTypes = {
 	selectCard: PropTypes.func.isRequired,
 	value: PropTypes.string,
 	judge: PropTypes.string.isRequired,
-	contender: PropTypes.string.isRequired,
+	competitor: PropTypes.string.isRequired,
 	isSelected: PropTypes.bool
 };
 
@@ -37,7 +37,7 @@ class Score extends React.Component {
 		super(props, context);
 		this.state = {
 			selectedCard: null,
-			grid: this.createGrid(props.contenders, props.judges)
+			grid: this.createGrid(props.competitors, props.judges)
 		};
 
 		this.scoreCardSelected = this.scoreCardSelected.bind(this);
@@ -53,7 +53,7 @@ class Score extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({
 			selectedCard: null,
-			grid: this.createGrid(nextProps.contenders, nextProps.judges)
+			grid: this.createGrid(nextProps.competitors, nextProps.judges)
 		});
 	}
 
@@ -65,17 +65,17 @@ class Score extends React.Component {
 		if (!this.state.selectedCard)
 			return;
 
-		const contenderIndex = this.props.contenders.indexOf(this.state.selectedCard.contender);
+		const competitorIndex = this.props.competitors.indexOf(this.state.selectedCard.competitor);
 		const judgeIndex = this.props.judges.indexOf(this.state.selectedCard.judge);
 
 		if (judgeIndex < this.props.judges.length - 1) {
 			return {
-				contender: this.state.selectedCard.contender,
+				competitor: this.state.selectedCard.competitor,
 				judge: this.props.judges[judgeIndex + 1]
 			};
-		} else if (contenderIndex < this.props.contenders.length + 1) {
+		} else if (competitorIndex < this.props.competitors.length + 1) {
 			return {
-				contender: this.props.contenders[contenderIndex + 1],
+				competitor: this.props.competitors[competitorIndex + 1],
 				judge: this.props.judges[0]
 			};
 		} else {
@@ -85,7 +85,7 @@ class Score extends React.Component {
 	}
 
 	getSelectedCardValue() {
-		return this.state.grid[this.state.selectedCard.contender][this.state.selectedCard.judge];
+		return this.state.grid[this.state.selectedCard.competitor][this.state.selectedCard.judge];
 	}
 
 	handleKeyDown(event) {
@@ -104,10 +104,10 @@ class Score extends React.Component {
 			value = parseInt(event.key);
 
 			// check if the value is in correct range
-			if (value > this.props.contenders.length)
+			if (value > this.props.competitors.length)
 				return;
 
-			// check if the value is already selected for another contender
+			// check if the value is already selected for another competitor
 			if (this.getSelectedCardValue() != value &&
 				Object.keys(this.state.grid)
 					.map((key) => this.state.grid[key][this.state.selectedCard.judge])
@@ -124,16 +124,16 @@ class Score extends React.Component {
 		if (!value)
 			return;
 
-		const newGrid = this.createGrid(this.props.contenders, this.props.judges, this.state.grid);
-		newGrid[this.state.selectedCard.contender][this.state.selectedCard.judge] = value;
+		const newGrid = this.createGrid(this.props.competitors, this.props.judges, this.state.grid);
+		newGrid[this.state.selectedCard.competitor][this.state.selectedCard.judge] = value;
 
 		this.setState({grid: newGrid, selectedCard: this.getNextCard()});
 	}
 
-	createGrid(contenders, judges, oldGrid) {
-		return contenders.reduce((row, contender) => {
-			row[contender] = judges.reduce((col, judge) => {
-				col[judge] = (oldGrid && oldGrid[contender]) ? oldGrid[contender][judge] : null;
+	createGrid(competitors, judges, oldGrid) {
+		return competitors.reduce((row, competitor) => {
+			row[competitor] = judges.reduce((col, judge) => {
+				col[judge] = (oldGrid && oldGrid[competitor]) ? oldGrid[competitor][judge] : null;
 				return col;
 			}, {});
 
@@ -141,27 +141,27 @@ class Score extends React.Component {
 		}, {});
 	}
 
-	testCardSelected(contender, judge) {
+	testCardSelected(competitor, judge) {
 		return (this.state.selectedCard &&
-		this.state.selectedCard.contender === contender &&
+		this.state.selectedCard.competitor === competitor &&
 		this.state.selectedCard.judge === judge);
 	}
 
-	scoreCardSelected(contender, judge) {
+	scoreCardSelected(competitor, judge) {
 
-		this.setState({selectedCard: {contender, judge}});
+		this.setState({selectedCard: {competitor, judge}});
 	}
 
-	createScoreCards(contender) {
+	createScoreCards(competitor) {
 		const self = this;
 		return self.props.judges.map((judge, index, arr) => {
 				return (<div className="score-item" key={index}>
 					<ScoreCard maxValue={arr.length}
-					           value={self.state.grid[contender][judge]}
+					           value={self.state.grid[competitor][judge]}
 					           judge={judge}
-					           contender={contender}
+					           competitor={competitor}
 					           selectCard={self.scoreCardSelected}
-					           isSelected={self.testCardSelected(contender, judge)}/>
+					           isSelected={self.testCardSelected(competitor, judge)}/>
 				</div>);
 			}
 		);
@@ -177,10 +177,10 @@ class Score extends React.Component {
 					))}
 				</div>
 
-				{this.props.contenders.map((contender, index) => (
+				{this.props.competitors.map((competitor, index) => (
 					<div className="score-row" key={index}>
-						<h2 className="score-item score-label">{contender}</h2>
-						{this.createScoreCards(contender)}
+						<h2 className="score-item score-label">{competitor}</h2>
+						{this.createScoreCards(competitor)}
 					</div>
 				))}
 			</div>
@@ -188,7 +188,7 @@ class Score extends React.Component {
 	}
 }
 Score.propTypes = {
-	contenders: PropTypes.array.isRequired,
+	competitors: PropTypes.array.isRequired,
 	judges: PropTypes.array.isRequired
 };
 
