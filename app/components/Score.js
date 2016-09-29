@@ -172,8 +172,8 @@ class Score extends React.Component {
 			<div className="score">
 				<div className="score-row">
 					<h2 className="score-item score-label"/>
-					{this.props.judges.map((item, index) => (
-						<h2 className="score-item score-label" key={index}>{item}</h2>
+					{this.props.judges.map((judge, index) => (
+						<h2 className="score-item score-label" key={index}>{judge}</h2>
 					))}
 				</div>
 

@@ -257,3 +257,42 @@ nav > a{
 	display: table-cell;
 	width: 100%;
 }
+
+.checkbox {
+	cursor: pointer;
+	line-height: 22px;
+}
+
+.checkbox > input[type=checkbox]{
+	display: none;
+}
+
+.checkbox > input[type=checkbox] + span {
+	position: relative;
+	padding-left: 30px;
+	font-size: 16px;
+}
+
+.checkbox > input[type=checkbox] + span::before {
+	content: ' ';
+	font-size: 22px;
+	border: 2px solid #e7eaec;
+	border-radius: 3px;
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	position: absolute;
+	left: 0;
+}
+
+.checkbox:hover > input[type=checkbox] + span::before {
+	border-color: #18a689;
+}
+
+.checkbox > input[type=checkbox]:checked + span::before {
+	font-family: "FontAwesome";
+	content: '\f00c';
+	background: #18a689;
+	border-color: #18a689;
+	color: white;
+}

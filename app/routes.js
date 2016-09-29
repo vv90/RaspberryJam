@@ -7,6 +7,7 @@ import App from './components/App';
 
 import HomePage from './components/HomePage';
 import Registration from './components/Registration';
+import QualifyingRound from './components/QualifyingRound';
 import Skating from './components/Skating';
 import Setup from './components/Setup';
 
@@ -15,6 +16,7 @@ export default (
 		<IndexRoute component={HomePage} />
 		<Route path="setup" component={Setup} />
 		<Route path="registration" component={Registration} />
+		<Route path="qualifying" component={QualifyingRound} />
 		<Route path="skating" component={Skating} />
 	</Route>
 );
