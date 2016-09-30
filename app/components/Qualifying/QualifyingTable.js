@@ -6,8 +6,8 @@ class QualifyingTable extends React.Component {
 
 		this.getCheckedHandler = this.getCheckedHandler.bind(this);
 	}
-	getCheckedHandler(judge, competitor) {
-		return event => this.props.onSelection(judge, competitor, event.target.checked);
+	getCheckedHandler(judgeId, competitor) {
+		return event => this.props.onSelection(judgeId, competitor, event.target.checked);
 	}
 
 	render() {
@@ -18,7 +18,8 @@ class QualifyingTable extends React.Component {
 						<th className="table-column-right"></th>
 						{this.props.judges.map((judge, index) => (
 							<th key={index} className="table-column-centered">
-								<label key={index}>{judge}</label>
+								<h4>{`(${judge.id}) ${judge.name}`}</h4>
+								<span className="subtext">{`(${this.props.selection.countSelected(judge.id)}/${this.props.numberToPass})`}</span>
 							</th>
 						))}
 					</tr>
@@ -35,8 +36,8 @@ class QualifyingTable extends React.Component {
 										<input type="checkbox"
 										       key={index}
 										       value={{judge, competitor}}
-										       checked={this.props.selected[judge][competitor]}
-										       onChange={this.getCheckedHandler(judge, competitor)}/>
+										       checked={this.props.selection[judge.id][competitor]}
+										       onChange={this.getCheckedHandler(judge.id, competitor)}/>
 										<span></span>
 									</label>
 								</td>
@@ -51,7 +52,8 @@ class QualifyingTable extends React.Component {
 QualifyingTable.propTypes = {
 	competitors: PropTypes.array.isRequired,
 	judges: PropTypes.array.isRequired,
-	selected: PropTypes.object.isRequired,
+	selection: PropTypes.object.isRequired,
+	numberToPass: PropTypes.number.isRequired,
 	onSelection: PropTypes.func.isRequired
 };
 

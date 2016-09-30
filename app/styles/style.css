@@ -38,6 +38,10 @@ input {
 	font-size: 14px;
 }
 
+h4, h5, h6 {
+	margin: 0;
+}
+
 .view-container {
 	margin-left: 220px;
 }
@@ -361,4 +365,9 @@ nav > a{
 	background: #18a689;
 	border-color: #18a689;
 	color: white;
+}
+
+.subtext {
+	font-size: 13px;
+	font-weight: normal;
 }

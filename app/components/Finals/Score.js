@@ -89,7 +89,7 @@ class Score extends React.Component {
 	}
 
 	handleKeyDown(event) {
-		// do nothing if no card selected
+		// do nothing if no card selection
 		if (!this.state.selectedCard)
 			return;
 
@@ -107,7 +107,7 @@ class Score extends React.Component {
 			if (value > this.props.competitors.length)
 				return;
 
-			// check if the value is already selected for another competitor
+			// check if the value is already selection for another competitor
 			if (this.getSelectedCardValue() != value &&
 				Object.keys(this.state.grid)
 					.map((key) => this.state.grid[key][this.state.selectedCard.judge])

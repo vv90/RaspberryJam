@@ -8,7 +8,13 @@ class Qualifying extends React.Component {
 		super(props, context);
 		const competitors =
 			["10", "21", "52", "8", "24", "42", "13", "22", "3", "18", "54", "35", "40", "37"];
-		const judges = ["A", "B", "C", "D", "E"];
+		const judges = [
+			{ id: "A", name: "John Smith" },
+			{ id: "B", name: "Sarah Scott" },
+			{ id: "C", name: "Sam Johnson" },
+			{ id: "D", name: "Mark Tucker" },
+			{ id: "E", name: "Linda Cox" }
+		];
 		this.state = {
 			numberToPass: Math.ceil(competitors.length/2),
 			competitors: competitors,

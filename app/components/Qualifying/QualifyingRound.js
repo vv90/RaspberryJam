@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import Box from '../Common/Box';
 import QualifyingTable from './QualifyingTable';
+import QualifyingSelection from './qualifyingSelection';
 
 class QualifyingRound extends React.Component {
 	constructor(props, context) {
@@ -18,37 +19,26 @@ class QualifyingRound extends React.Component {
 
 		this.state = {
 			groups: groups,
-			selected: this.props.judges.reduce((result, judge) => {
-				result[judge] = this.props.competitors.reduce((result, competitor) => {
-					result[competitor] = false;
-					return result;
-				}, {});
-				return result;
-			}, {})
+			selection: new QualifyingSelection(props.judges, props.competitors)
 		};
 
-		this.countSelected = this.countSelected.bind(this);
 		this.updateSelection = this.updateSelection.bind(this);
 	}
 
-	countSelected(judge) {
-		return Object.keys(this.state.selected[judge])
-			.filter(competitor => this.state.selected[judge][competitor] === true)
-			.length;
-	}
-
-	updateSelection(judge, competitor, isSelected) {
+	updateSelection(judgeId, competitor, isSelected) {
 		if (isSelected &&
-			!this.state.selected[judge][competitor] &&
-			this.countSelected(judge) >= this.props.numberToPass) {
+			!this.state.selection[judgeId][competitor] &&
+			this.state.selection.countSelected(judgeId) >= this.props.numberToPass) {
 
-			console.log(`Maximum competitors already selected by judge ${judge}`);
+			console.log(`Maximum competitors already selected by judge ${judgeId}`);
 
 		} else {
 
-			const selected = this.state.selected;
-			selected[judge][competitor] = isSelected;
-			this.setState({selected: selected});
+			const selection = new QualifyingSelection(this.props.judges, this.props.competitors)
+				.copySelection(this.state.selection);
+
+			selection[judgeId][competitor] = isSelected;
+			this.setState({selection: selection});
 		}
 	}
 
@@ -59,7 +49,8 @@ class QualifyingRound extends React.Component {
 					<Box key={index} title={`Group ${index + 1}`} >
 						<QualifyingTable competitors={group}
 						                 judges={this.props.judges}
-						                 selected={this.state.selected}
+						                 selection={this.state.selection}
+						                 numberToPass={this.props.numberToPass}
 						                 onSelection={this.updateSelection}/>
 					</Box>
 				))}
