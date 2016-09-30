@@ -19,6 +19,7 @@ class Setup extends React.Component {
 		};
 
 		this.add = this.add.bind(this);
+		this.remove = this.remove.bind(this);
 		this.nameChanged = this.nameChanged.bind(this);
 	}
 
@@ -35,14 +36,34 @@ class Setup extends React.Component {
 			return letters[letters.indexOf(letter) + 1];
 	}
 
+	static orderJudgeIds (judges) {
+		if (!judges || !judges.length)
+			return undefined;
+
+		judges[0].id = "A";
+
+		for (let i = 1; i < judges.length; i++) {
+			judges[i].id = Setup.getNextLetter(judges[i - 1].id);
+		}
+
+		return judges;
+	}
+
 	add() {
 		const judgeId = Setup.getNextLetter(this.state.judges[this.state.judges.length - 1].id);
 		if (judgeId)
-			this.setState({ judges: this.state.judges.concat([{id: judgeId, name: ""}]) });
+			this.setState({ judges: [...this.state.judges, {id: judgeId, name: ""}] });
+	}
+
+	remove (index) {
+		const judges = [...this.state.judges];
+		judges.splice(index, 1);
+
+		this.setState({judges: Setup.orderJudgeIds(judges)});
 	}
 
 	nameChanged(index, value) {
-		const judges = this.state.judges;
+		const judges = [...this.state.judges];
 		judges[index].name = value;
 
 		this.setState({judges: judges});
@@ -55,6 +76,7 @@ class Setup extends React.Component {
 				<PageContent>
 					<Box title="Judges" tools={[{execute: this.add, class: "fa fa-plus"}]}>
 						<JudjesTable judges={this.state.judges}
+						             remove={this.remove}
 						             onNameChange={this.nameChanged}/>
 					</Box>
 				</PageContent>

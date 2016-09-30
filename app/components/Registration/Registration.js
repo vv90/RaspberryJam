@@ -53,27 +53,30 @@ class Registration extends React.Component {
 		this.closeDialog = this.closeDialog.bind(this);
 		this.updateDialogFields = this.updateDialogFields.bind(this);
 		this.saveNewCouple = this.saveNewCouple.bind(this);
+		this.removeCouple = this.removeCouple.bind(this);
 	}
 
 	openDialog () {
-		const dialog = this.state.dialog;
+		const dialog = Object.assign({}, this.state.dialog);
 		dialog.show = true;
-		this.setState({ dialog: dialog });
+		this.setState({ dialog });
 	}
 
 	closeDialog () {
-		const dialog = this.state.dialog;
+		const dialog = Object.assign({}, this.state.dialog);
 		dialog.show = false;
-		this.setState({ dialog: dialog});
+		this.setState({ dialog });
 	}
 
 	saveNewCouple () {
-		const dialog = this.state.dialog;
+		const dialog = Object.assign({}, this.state.dialog);
 
 		this.setState({
 			dialog: dialog,
-			competitors: this.state.competitors.concat(
-				[{leader: this.state.dialog.leader, follower: this.state.dialog.follower}])
+			competitors: [
+				...this.state.competitors,
+				{leader: this.state.dialog.leader, follower: this.state.dialog.follower}
+			]
 		});
 
 		dialog.show = false;
@@ -82,9 +85,16 @@ class Registration extends React.Component {
 	}
 
 	updateDialogFields (property, value) {
-		const dialog = this.state.dialog;
+		const dialog = Object.assign({}, this.state.dialog);
 		dialog[property] = value;
 		this.setState({ dialog });
+	}
+
+	removeCouple (index) {
+		const competitors = [...this.state.competitors];
+		competitors.splice(index, 1);
+
+		this.setState({ competitors });
 	}
 
 	render (){
@@ -99,7 +109,7 @@ class Registration extends React.Component {
 			        onFormChange={this.updateDialogFields}/>
 			<PageContent>
 				<Box title="Contenders" tools={[{execute: this.openDialog, class: "fa fa-plus"}]}>
-					<RegistrationTable competitors={this.state.competitors}/>
+					<RegistrationTable competitors={this.state.competitors} remove={this.removeCouple}/>
 				</Box>
 			</PageContent>
 		</div>);

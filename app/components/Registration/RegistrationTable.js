@@ -5,6 +5,10 @@ class RegistrationTable extends React.Component {
 		super(props, context);
 	}
 
+	getRemoveHandler(index) {
+		return () => this.props.remove(index);
+	}
+
 	render() {
 		return (
 			<table className="table">
@@ -22,6 +26,11 @@ class RegistrationTable extends React.Component {
 							<td>{index + 1}</td>
 							<td>{item.leader}</td>
 							<td>{item.follower}</td>
+							<td className="table-column-right">
+								<a className="tool" onClick={this.getRemoveHandler(index)}>
+									<i className="fa fa-times"/>
+								</a>
+							</td>
 						</tr>
 					);
 				})}
@@ -32,7 +41,7 @@ class RegistrationTable extends React.Component {
 }
 RegistrationTable.propTypes = {
 	competitors: PropTypes.array.isRequired,
-	add: PropTypes.func
+	remove: PropTypes.func.isRequired
 };
 
 export default RegistrationTable;

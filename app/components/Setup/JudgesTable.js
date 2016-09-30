@@ -4,21 +4,6 @@
 
 import React, {PropTypes} from 'react';
 
-function JudgesTableItem (props) {
-	return (
-		<tr>
-			<td>{props.item.id}</td>
-			<td><input type="text"
-			           value={props.item.name}
-			           onChange={props.onChange} /></td>
-		</tr>
-	);
-}
-JudgesTableItem.propTypes = {
-	item: PropTypes.object.isRequired,
-	onChange: PropTypes.func.isRequired
-};
-
 class JudgesTable extends React.Component {
 	constructor(props, context) {
 		super(props, context);
@@ -28,6 +13,10 @@ class JudgesTable extends React.Component {
 		return event => this.props.onNameChange(index, event.target.value);
 	}
 
+	getRemoveHandler(index) {
+		return () => this.props.remove(index);
+	}
+
 	render() {
 		return (
 			<table className="table">
@@ -35,13 +24,24 @@ class JudgesTable extends React.Component {
 					<tr>
 						<th>#</th>
 						<th>Name</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					{this.props.judges.map((item, index) =>
-						(<JudgesTableItem key={index}
-						                 item={item}
-						                 onChange={this.getJudgeNameChangeHandler(index)}/>)
+						(<tr key={index}>
+							<td>{item.id}</td>
+							<td>
+								<input type="text"
+							           value={item.name}
+							           onChange={this.getJudgeNameChangeHandler(index)} />
+							</td>
+							<td className="table-column-right">
+								<a className="tool" onClick={this.getRemoveHandler(index)}>
+									<i className="fa fa-times"/>
+								</a>
+							</td>
+						</tr>)
 					)}
 				</tbody>
 			</table>
@@ -50,6 +50,7 @@ class JudgesTable extends React.Component {
 }
 JudgesTable.propTypes = {
 	judges: PropTypes.array.isRequired,
+	remove: PropTypes.func.isRequired,
 	onNameChange: PropTypes.func.isRequired
 };
 

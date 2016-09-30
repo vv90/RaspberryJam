@@ -134,6 +134,11 @@ nav > a{
 	margin: 0;
 }
 
+.tool {
+	cursor: pointer;
+	color: #c4c4c4;
+}
+
 .box {
 	background: white;
 	margin-top: 0;
@@ -164,10 +169,8 @@ nav > a{
 	text-align: right;
 }
 
-.box-tools a {
-	cursor: pointer;
+.box-tools .tool {
 	margin-left: 5px;
-	color: #c4c4c4;
 }
 
 .table {

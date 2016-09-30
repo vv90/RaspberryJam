@@ -8,7 +8,9 @@ function Box (props) {
 				{(props.tools && props.tools.length) ? (
 					<div className="box-tools">
 						{props.tools.map((tool, index) => (
-							<a key={index} onClick={tool.execute}><i className={tool.class}/></a>
+							<a key={index} onClick={tool.execute} className="tool">
+								<i className={tool.class}/>
+							</a>
 						))}
 					</div>
 				) : null}
