@@ -1,6 +1,6 @@
 import React from 'react';
-import PageHeader from '../Common/PageHeader';
-import PageContent from '../Common/PageContent';
+import { browserHistory } from 'react-router';
+import {Page, PageHeader, PageContent, PageFooter} from '../Common/Page';
 import Box from '../Common/Box';
 import JudjesTable from './JudgesTable';
 
@@ -69,9 +69,13 @@ class Setup extends React.Component {
 		this.setState({judges: judges});
 	}
 
+	next () {
+		browserHistory.push("/registration");
+	}
+
 	render() {
 		return (
-			<div>
+			<Page>
 				<PageHeader title="Setup"/>
 				<PageContent>
 					<Box title="Judges" tools={[{execute: this.add, class: "fa fa-plus"}]}>
@@ -80,7 +84,10 @@ class Setup extends React.Component {
 						             onNameChange={this.nameChanged}/>
 					</Box>
 				</PageContent>
-			</div>);
+				<PageFooter>
+					<button type="button" className="button button-primary" onClick={this.next}>Next</button>
+				</PageFooter>
+			</Page>);
 	}
 }
 

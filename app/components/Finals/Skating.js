@@ -3,8 +3,8 @@
  */
 
 import React from 'react';
-import PageHeader from '../Common/PageHeader';
-import PageContent from '../Common/PageContent';
+import { browserHistory } from 'react-router';
+import {Page, PageHeader, PageContent, PageFooter} from '../Common/Page';
 import Box from '../Common/Box';
 import Score from './Score';
 
@@ -17,15 +17,25 @@ class Skating extends React.Component {
 		};
 	}
 
+	back() {
+		browserHistory.push("/qualifying");
+	}
+
 	render () {
-		return (<div>
-			<PageHeader title="Finals"/>
-			<PageContent>
-				<Box>
-					<Score competitors={this.state.competitors} judges={this.state.judges}/>
-				</Box>
-			</PageContent>
-		</div>);
+		return (
+			<Page>
+				<PageHeader title="Finals"/>
+				<PageContent>
+					<Box>
+						<Score competitors={this.state.competitors} judges={this.state.judges}/>
+					</Box>
+				</PageContent>
+				<PageFooter>
+					<button type="button" className="button" onClick={this.back}>Back</button>
+					<button type="button" className="button button-primary">Finish</button>
+				</PageFooter>
+			</Page>
+		);
 	}
 }
 

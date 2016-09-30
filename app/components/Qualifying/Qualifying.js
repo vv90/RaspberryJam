@@ -1,6 +1,6 @@
 import React from 'react';
-import PageHeader from '../Common/PageHeader';
-import PageContent from '../Common/PageContent';
+import { browserHistory } from 'react-router';
+import {Page, PageHeader, PageContent, PageFooter} from '../Common/Page';
 import QualifyingRound from './QualifyingRound';
 
 class Qualifying extends React.Component {
@@ -17,9 +17,17 @@ class Qualifying extends React.Component {
 
 	}
 
+	next() {
+		browserHistory.push("/skating");
+	}
+
+	back() {
+		browserHistory.push("/registration");
+	}
+
 	render() {
 		return (
-			<div>
+			<Page>
 				<PageHeader title="Qualifying"
 				            subtitle={`Select ${this.state.numberToPass}/${this.state.competitors.length} to pass to the next round`}/>
 				<PageContent>
@@ -28,7 +36,11 @@ class Qualifying extends React.Component {
 				                 maxGroupSize={5}
 				                 numberToPass={Math.ceil(this.state.competitors.length/2)} />
 				</PageContent>
-			</div>
+				<PageFooter>
+					<button type="button" className="button" onClick={this.back}>Back</button>
+					<button type="button" className="button button-primary" onClick={this.next}>Next</button>
+				</PageFooter>
+			</Page>
 		);
 	}
 }

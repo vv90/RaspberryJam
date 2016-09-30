@@ -3,8 +3,8 @@
  */
 
 import React from 'react';
-import PageHeader from '../Common/PageHeader';
-import PageContent from '../Common/PageContent';
+import { browserHistory } from 'react-router';
+import {Page, PageHeader, PageContent, PageFooter} from '../Common/Page';
 import Box from '../Common/Box';
 import RegistrationTable from './RegistrationTable';
 import Dialog from '../Common/Dialog';
@@ -97,22 +97,37 @@ class Registration extends React.Component {
 		this.setState({ competitors });
 	}
 
+	next() {
+		browserHistory.push("/qualifying");
+	}
+
+	back() {
+		browserHistory.push("/setup");
+	}
+
 	render (){
-		return (<div>
-			<PageHeader title="Registration"
-			            subtitle={`${this.state.competitors.length} couples registered`}/>
-			<Dialog show={this.state.dialog.show}
-			        ok={this.saveNewCouple}
-			        cancel={this.closeDialog}
-			        leader={this.state.dialog.leader}
-			        follower={this.state.dialog.follower}
-			        onFormChange={this.updateDialogFields}/>
-			<PageContent>
-				<Box title="Contenders" tools={[{execute: this.openDialog, class: "fa fa-plus"}]}>
-					<RegistrationTable competitors={this.state.competitors} remove={this.removeCouple}/>
-				</Box>
-			</PageContent>
-		</div>);
+		return (
+			<Page>
+				<Dialog show={this.state.dialog.show}
+				        ok={this.saveNewCouple}
+				        cancel={this.closeDialog}
+				        leader={this.state.dialog.leader}
+				        follower={this.state.dialog.follower}
+				        onFormChange={this.updateDialogFields}/>
+
+				<PageHeader title="Registration"
+				            subtitle={`${this.state.competitors.length} couples registered`}/>
+				<PageContent>
+					<Box title="Contenders" tools={[{execute: this.openDialog, class: "fa fa-plus"}]}>
+						<RegistrationTable competitors={this.state.competitors} remove={this.removeCouple}/>
+					</Box>
+				</PageContent>
+				<PageFooter>
+					<button type="button" className="button" onClick={this.back}>Back</button>
+					<button type="button" className="button button-primary" onClick={this.next}>Next</button>
+				</PageFooter>
+			</Page>
+		);
 	}
 }
 

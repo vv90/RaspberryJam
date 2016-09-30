@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import PageHeader from '../Common/PageHeader';
+import {Page, PageHeader, PageContent, PageFooter} from '../Common/Page';
 
 class HomePage extends React.Component {
 	render() {

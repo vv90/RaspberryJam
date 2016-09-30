@@ -2,6 +2,14 @@
 	box-sizing: border-box;
 }
 
+html,
+body,
+#root,
+.app-container,
+.view-container {
+	height: 100%;
+}
+
 body {
 	background-color: #f3f3f4;
 	margin: 0;
@@ -69,9 +77,14 @@ nav > a{
 
 }
 
+.page {
+	position: relative;
+	min-height: 100%;
+}
+
 .page-header {
 	background: #ffffff;
-	border-top: 0;
+	border-bottom: 1px solid #e7eaec;
 	padding: 0 30px 20px 30px;
 }
 
@@ -88,7 +101,18 @@ nav > a{
 }
 
 .page-content {
-	padding: 20px 30px 40px;
+	padding: 20px 30px 90px;
+}
+
+.page-footer {
+	background: #ffffff;
+	border-top: 1px solid #e7eaec;
+	padding: 20px 30px 20px 30px;
+	text-align: right;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
 }
 
 .score {
@@ -217,6 +241,10 @@ nav > a{
 	outline: none;
 }
 
+.button+.button {
+	margin-left: 5px;
+}
+
 .button:hover {
 	border: 1px solid #d2d2d2;
 }
@@ -274,10 +302,6 @@ nav > a{
 	padding: 15px;
 	text-align: right;
 	border-top: 1px solid #e5e5e5;
-}
-
-.dialog-footer .button+.button {
-	margin-left: 5px;
 }
 
 .form {
