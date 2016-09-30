@@ -3,8 +3,11 @@
  */
 
 import React from 'react';
+import PageHeader from '../Common/PageHeader';
+import PageContent from '../Common/PageContent';
+import Box from '../Common/Box';
 import RegistrationTable from './RegistrationTable';
-import Dialog from './Dialog';
+import Dialog from '../Common/Dialog';
 
 class Registration extends React.Component {
 	constructor(props, context) {
@@ -66,15 +69,16 @@ class Registration extends React.Component {
 
 	saveNewCouple () {
 		const dialog = this.state.dialog;
-		dialog.show = false;
-		dialog.leader = "";
-		dialog.follower = "";
 
 		this.setState({
 			dialog: dialog,
 			competitors: this.state.competitors.concat(
 				[{leader: this.state.dialog.leader, follower: this.state.dialog.follower}])
 		});
+
+		dialog.show = false;
+		dialog.leader = "";
+		dialog.follower = "";
 	}
 
 	updateDialogFields (property, value) {
@@ -85,14 +89,19 @@ class Registration extends React.Component {
 
 	render (){
 		return (<div>
-			<h1>Registration</h1>
+			<PageHeader title="Registration"
+			            subtitle={`${this.state.competitors.length} couples registered`}/>
 			<Dialog show={this.state.dialog.show}
 			        ok={this.saveNewCouple}
 			        cancel={this.closeDialog}
 			        leader={this.state.dialog.leader}
 			        follower={this.state.dialog.follower}
 			        onFormChange={this.updateDialogFields}/>
-			<RegistrationTable competitors={this.state.competitors} add={this.openDialog}/>
+			<PageContent>
+				<Box title="Contenders" tools={[{execute: this.openDialog, class: "fa fa-plus"}]}>
+					<RegistrationTable competitors={this.state.competitors}/>
+				</Box>
+			</PageContent>
 		</div>);
 	}
 }

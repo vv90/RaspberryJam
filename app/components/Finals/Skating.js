@@ -3,6 +3,9 @@
  */
 
 import React from 'react';
+import PageHeader from '../Common/PageHeader';
+import PageContent from '../Common/PageContent';
+import Box from '../Common/Box';
 import Score from './Score';
 
 class Skating extends React.Component {
@@ -16,8 +19,12 @@ class Skating extends React.Component {
 
 	render () {
 		return (<div>
-			<h1>Finals</h1>
-			<Score competitors={this.state.competitors} judges={this.state.judges}/>
+			<PageHeader title="Finals"/>
+			<PageContent>
+				<Box>
+					<Score competitors={this.state.competitors} judges={this.state.judges}/>
+				</Box>
+			</PageContent>
 		</div>);
 	}
 }

@@ -3,13 +3,12 @@
  */
 
 import React from 'react';
+import PageHeader from '../Common/PageHeader';
 
 class HomePage extends React.Component {
 	render() {
 		return (
-			<div>
-				<h1>Home Page</h1>
-			</div>
+			<PageHeader title="Home Page"/>
 		);
 	}
 }

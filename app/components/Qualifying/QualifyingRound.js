@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import Box from '../Common/Box';
 import QualifyingTable from './QualifyingTable';
 
 class QualifyingRound extends React.Component {
@@ -54,16 +55,14 @@ class QualifyingRound extends React.Component {
 	render() {
 		return (
 			<div>
-				<h1>Qualifying</h1>
 				{this.state.groups.map((group, index) => (
-					<QualifyingTable key={index}
-					                 groupNumber={index + 1}
-					                 competitors={group}
-					                 judges={this.props.judges}
-					                 selected={this.state.selected}
-					                 onSelection={this.updateSelection}/>
+					<Box key={index} title={`Group ${index + 1}`} >
+						<QualifyingTable competitors={group}
+						                 judges={this.props.judges}
+						                 selected={this.state.selected}
+						                 onSelection={this.updateSelection}/>
+					</Box>
 				))}
-
 			</div>
 		);
 	}

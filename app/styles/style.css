@@ -32,7 +32,6 @@ input {
 
 .view-container {
 	margin-left: 220px;
-	padding: 20px;
 }
 
 nav > a{
@@ -68,6 +67,28 @@ nav > a{
 	color: white;
 	cursor: pointer;
 
+}
+
+.page-header {
+	background: #ffffff;
+	border-top: 0;
+	padding: 0 30px 20px 30px;
+}
+
+.page-header .page-header-title {
+	margin: 0;
+	padding-top: 20px;
+	padding-bottom: 10px;
+	font-size: 24px;
+	font-weight: 100;
+}
+
+.page-header .page-header-subtitle {
+	font-size: 14px;
+}
+
+.page-content {
+	padding: 20px 30px 40px;
 }
 
 .score {
@@ -125,6 +146,7 @@ nav > a{
 .box-title {
 	border-top: 3px solid #e7eaec;
 	padding: 14px 15px 7px;
+	overflow: auto;
 }
 
 .box-title h3 {
