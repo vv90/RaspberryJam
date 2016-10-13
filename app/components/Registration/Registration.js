@@ -2,8 +2,12 @@
  * Created by Vladimir on 9/16/2016.
  */
 
-import React from 'react';
+import React, {PropTypes} from 'react';
 import { browserHistory } from 'react-router';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+
+import * as competitionWorkflowActions from '../../actions/competitionWorkflowActions';
 import {Page, PageHeader, PageContent, PageFooter} from '../Common/Page';
 import Box from '../Common/Box';
 import RegistrationTable from './RegistrationTable';
@@ -19,43 +23,50 @@ class Registration extends React.Component {
 				leader: "",
 				follower: ""
 			},
-			competitors: [
-				{ leader: "Andrew Smith", follower: "Jacqueline Long"},
-				{ leader: "Randy Webb", follower: "Marie Miller"},
-				{ leader: "Jeremy Barnes", follower: "Lori Alexander"},
-				{ leader: "Ryan Burns", follower: "Kelly Reid"},
-				{ leader: "Douglas Allen", follower: "Anna Myers"},
-				{ leader: "Brian Kelley", follower: "Carol Hill"},
-				{ leader: "Donald Day", follower: "Lisa Hart"},
-				{ leader: "Terry Brooks", follower: "Ruby Black"},
-				{ leader: "Raymond James", follower: "Dorothy Peters"},
-				{ leader: "Larry Thompson", follower: "Gloria Morris"},
-				{ leader: "Martin Carr", follower: "Donna Mcdonald"},
-				{ leader: "Carlos Hill", follower: "Jessica Fields"},
-				{ leader: "Charles Montgomery", follower: "Joyce Myers"},
-				{ leader: "Andrew Brooks", follower: "Evelyn Cook"},
-				{ leader: "Roger Ford", follower: "Betty Hudson"},
-				{ leader: "Johnny Sanders", follower: "Michelle Dunn"},
-				{ leader: "Ralph Smith", follower: "Pamela Hanson"},
-				{ leader: "Aaron Campbell", follower: "Rachel Ellis"},
-				{ leader: "Dennis Ramirez", follower: "Helen Young"},
-				{ leader: "Gerald Ellis", follower: "Kathy Howard"},
-				{ leader: "Steve Miller", follower: "Carolyn Murray"},
-				{ leader: "James Taylor", follower: "Michelle Wells"},
-				{ leader: "Justin Owens", follower: "Donna Grant"},
-				{ leader: "Eugene Webb", follower: "Jennifer Bryant"},
-				{ leader: "Ernest Holmes", follower: "Kelly Ferguson"},
-				{ leader: "Brian Snyder", follower: "Paula Woods"},
-			]
+			competitors: props.competitorsInit
 		};
 
+		this.populateMockData = this.populateMockData.bind(this);
 		this.openDialog = this.openDialog.bind(this);
 		this.closeDialog = this.closeDialog.bind(this);
 		this.updateDialogFields = this.updateDialogFields.bind(this);
 		this.saveNewCouple = this.saveNewCouple.bind(this);
 		this.removeCouple = this.removeCouple.bind(this);
+		this.next = this.next.bind(this);
 	}
 
+	populateMockData() {
+		const competitors = [
+			{ leader: "Andrew Smith", follower: "Jacqueline Long"},
+			{ leader: "Randy Webb", follower: "Marie Miller"},
+			{ leader: "Jeremy Barnes", follower: "Lori Alexander"},
+			{ leader: "Ryan Burns", follower: "Kelly Reid"},
+			{ leader: "Douglas Allen", follower: "Anna Myers"},
+			{ leader: "Brian Kelley", follower: "Carol Hill"},
+			{ leader: "Donald Day", follower: "Lisa Hart"},
+			{ leader: "Terry Brooks", follower: "Ruby Black"},
+			{ leader: "Raymond James", follower: "Dorothy Peters"},
+			{ leader: "Larry Thompson", follower: "Gloria Morris"},
+			{ leader: "Martin Carr", follower: "Donna Mcdonald"},
+			{ leader: "Carlos Hill", follower: "Jessica Fields"},
+			{ leader: "Charles Montgomery", follower: "Joyce Myers"},
+			{ leader: "Andrew Brooks", follower: "Evelyn Cook"},
+			{ leader: "Roger Ford", follower: "Betty Hudson"},
+			{ leader: "Johnny Sanders", follower: "Michelle Dunn"},
+			{ leader: "Ralph Smith", follower: "Pamela Hanson"},
+			{ leader: "Aaron Campbell", follower: "Rachel Ellis"},
+			{ leader: "Dennis Ramirez", follower: "Helen Young"},
+			{ leader: "Gerald Ellis", follower: "Kathy Howard"},
+			{ leader: "Steve Miller", follower: "Carolyn Murray"},
+			{ leader: "James Taylor", follower: "Michelle Wells"},
+			{ leader: "Justin Owens", follower: "Donna Grant"},
+			{ leader: "Eugene Webb", follower: "Jennifer Bryant"},
+			{ leader: "Ernest Holmes", follower: "Kelly Ferguson"},
+			{ leader: "Brian Snyder", follower: "Paula Woods"},
+		];
+
+		this.setState({competitors: competitors});
+	}
 	openDialog () {
 		const dialog = Object.assign({}, this.state.dialog);
 		dialog.show = true;
@@ -98,6 +109,7 @@ class Registration extends React.Component {
 	}
 
 	next() {
+		this.props.actions.submitRegistrationStep(this.state.competitors);
 		browserHistory.push("/qualifying");
 	}
 
@@ -118,7 +130,10 @@ class Registration extends React.Component {
 				<PageHeader title="Registration"
 				            subtitle={`${this.state.competitors.length} couples registered`}/>
 				<PageContent>
-					<Box title="Contenders" tools={[{execute: this.openDialog, class: "fa fa-plus"}]}>
+					<Box title="Contenders" tools={[
+						{execute: this.populateMockData, class: "fa fa-asterisk", title: "Generate mock data"},
+						{execute: this.openDialog, class: "fa fa-plus", title: "Add New"}
+					]}>
 						<RegistrationTable competitors={this.state.competitors} remove={this.removeCouple}/>
 					</Box>
 				</PageContent>
@@ -131,4 +146,21 @@ class Registration extends React.Component {
 	}
 }
 
-export default Registration;
+Registration.propTypes = {
+	competitorsInit: PropTypes.array.isRequired,
+	actions: PropTypes.object.isRequired
+};
+
+function mapStateToProps(state, ownProps) {
+	return {
+		competitorsInit: state.competitionWorkflow.competitors
+	};
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		actions: bindActionCreators(competitionWorkflowActions, dispatch)
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Registration);

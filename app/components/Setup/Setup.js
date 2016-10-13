@@ -1,28 +1,14 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import { browserHistory } from 'react-router';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+
+import * as competitionWorkflowActions from '../../actions/competitionWorkflowActions';
 import {Page, PageHeader, PageContent, PageFooter} from '../Common/Page';
 import Box from '../Common/Box';
 import JudjesTable from './JudgesTable';
 
 class Setup extends React.Component {
-	constructor(props, context) {
-		super(props, context);
-
-		this.state = {
-			judges: [
-				{ id: "A", name: "John Smith" },
-				{ id: "B", name: "Sarah Scott" },
-				{ id: "C", name: "Sam Johnson" },
-				{ id: "D", name: "Mark Tucker" },
-				{ id: "E", name: "Linda Cox" }
-			]
-		};
-
-		this.add = this.add.bind(this);
-		this.remove = this.remove.bind(this);
-		this.nameChanged = this.nameChanged.bind(this);
-	}
-
 	static getNextLetter(letter) {
 		letter = letter.toUpperCase();
 		const letters = ['A','B','C','D','E','F',
@@ -49,6 +35,32 @@ class Setup extends React.Component {
 		return judges;
 	}
 
+	constructor(props, context) {
+		super(props, context);
+
+		this.state = {
+			judges: props.judgesInit
+		};
+
+		this.populateMockData = this.populateMockData.bind(this);
+		this.add = this.add.bind(this);
+		this.remove = this.remove.bind(this);
+		this.nameChanged = this.nameChanged.bind(this);
+		this.next = this.next.bind(this);
+	}
+
+	populateMockData() {
+		const judges = [
+			{ id: "A", name: "John Smith" },
+			{ id: "B", name: "Sarah Scott" },
+			{ id: "C", name: "Sam Johnson" },
+			{ id: "D", name: "Mark Tucker" },
+			{ id: "E", name: "Linda Cox" }
+		];
+
+		this.setState({ judges: judges });
+	}
+
 	add() {
 		const judgeId = Setup.getNextLetter(this.state.judges[this.state.judges.length - 1].id);
 		if (judgeId)
@@ -70,6 +82,7 @@ class Setup extends React.Component {
 	}
 
 	next () {
+		this.props.actions.submitSetupStep(this.state.judges);
 		browserHistory.push("/registration");
 	}
 
@@ -78,7 +91,10 @@ class Setup extends React.Component {
 			<Page>
 				<PageHeader title="Setup"/>
 				<PageContent>
-					<Box title="Judges" tools={[{execute: this.add, class: "fa fa-plus"}]}>
+					<Box title="Judges" tools={[
+						{execute: this.populateMockData, class: "fa fa-asterisk", title: "Generate mock data"},
+						{execute: this.add, class: "fa fa-plus", title: "Add New"}
+					]}>
 						<JudjesTable judges={this.state.judges}
 						             remove={this.remove}
 						             onNameChange={this.nameChanged}/>
@@ -91,4 +107,21 @@ class Setup extends React.Component {
 	}
 }
 
-export default Setup;
+Setup.propTypes = {
+	judgesInit: PropTypes.array.isRequired,
+	actions: PropTypes.object.isRequired
+};
+
+function mapStateToProps(state, ownProps) {
+	return {
+		judgesInit: state.competitionWorkflow.judges
+	};
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		actions: bindActionCreators(competitionWorkflowActions, dispatch)
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Setup);
