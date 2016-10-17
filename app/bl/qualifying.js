@@ -1,16 +1,18 @@
 /**
- * Created by Vladimir on 10/1/2016.
+ * Created by Vladimir on 10/13/2016.
  */
-
-class QualifyingSelection {
+export class QualifyingSelection {
 	constructor(judges, competitors) {
 		// map judges and competitors from arrays to object properties for easier access
+		// QualifyingSelection[judgeId][competitorId].isSelected
 		judges.forEach((judge) => {
 			this[judge.id] = competitors.reduce((result, competitor) => {
-				result[competitor] = false;
+				result[competitor.id] = false;
 				return result;
 			}, {});
 		});
+
+		this.numberToPass = Math.ceil(competitors.length/2);
 	}
 
 	countSelected(judgeId) {
@@ -32,5 +34,3 @@ class QualifyingSelection {
 		return this;
 	}
 }
-
-export default QualifyingSelection;

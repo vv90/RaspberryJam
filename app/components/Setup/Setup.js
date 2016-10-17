@@ -82,7 +82,7 @@ class Setup extends React.Component {
 	}
 
 	next () {
-		this.props.actions.submitSetupStep(this.state.judges);
+		this.props.workflowActions.submitSetupStep(this.state.judges, 5);
 		browserHistory.push("/registration");
 	}
 
@@ -109,7 +109,7 @@ class Setup extends React.Component {
 
 Setup.propTypes = {
 	judgesInit: PropTypes.array.isRequired,
-	actions: PropTypes.object.isRequired
+	workflowActions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
@@ -120,7 +120,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		actions: bindActionCreators(competitionWorkflowActions, dispatch)
+		workflowActions: bindActionCreators(competitionWorkflowActions, dispatch)
 	};
 }
 

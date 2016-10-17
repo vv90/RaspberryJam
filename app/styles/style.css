@@ -51,6 +51,44 @@ nav > a{
 	text-decoration: none;
 }
 
+.notification-container {
+	position: fixed;
+	top: 5%;
+	right: 10%;
+	z-index: 1;
+}
+
+.notification {
+	padding: 15px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	margin-bottom: 10px;
+}
+
+.notification-warning {
+	color: #8a6d3b;
+	background-color: #fcf8e3;
+	border-color: #faebcc;
+}
+
+.notification-error {
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
+}
+
+.notification-info {
+	color: #31708f;
+	background-color: #d9edf7;
+	border-color: #bce8f1;
+}
+
+.notification-success {
+	color: #3c763d;
+	background-color: #dff0d8;
+	border-color: #d6e9c6;
+}
+
 .app-nav {
 	width: 220px;
 	height: 100%;
@@ -113,9 +151,9 @@ nav > a{
 	border-top: 1px solid #e7eaec;
 	padding: 20px 30px 20px 30px;
 	text-align: right;
-	position: absolute;
+	position: fixed;
+	left: 220px;
 	bottom: 0;
-	left: 0;
 	right: 0;
 }
 
@@ -368,7 +406,10 @@ nav > a{
 	color: white;
 }
 
+.text-good {
+	color: #18a689;
+}
+
 .subtext {
 	font-size: 13px;
-	font-weight: normal;
 }

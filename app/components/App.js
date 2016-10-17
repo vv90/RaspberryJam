@@ -4,6 +4,8 @@
 import React, {PropTypes} from 'react';
 import {Link, IndexLink} from 'react-router';
 
+import NotificationContainer from './Common/Notifications';
+
 const Header = () => {
 	return (
 		<nav className="app-nav">
@@ -20,6 +22,7 @@ class App extends React.Component {
 	render() {
 		return (
 			<div className="app-container">
+				<NotificationContainer/>
 				<Header />
 				<div className="view-container">
 					{this.props.children}

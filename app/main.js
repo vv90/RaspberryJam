@@ -14,14 +14,14 @@ import configureStore from './store/configureStore';
 import './styles/style.css';
 import './styles/font-awesome.min.css';
 
-const persistedState = localStorage.getItem('reduxState')
-	? JSON.parse(localStorage.getItem('reduxState'))
-	: {};
+const workflowStateValue = localStorage.getItem('competitionWorkflowState');
 
-const store = configureStore(persistedState);
+const store = configureStore(workflowStateValue
+	? { competitionWorkflow: JSON.parse(workflowStateValue) }
+	: {});
 
 store.subscribe(()=>{
-	localStorage.setItem('reduxState', JSON.stringify(store.getState()));
+	localStorage.setItem('competitionWorkflowState', JSON.stringify(store.getState().competitionWorkflow));
 });
 
 render(<Provider store={store}><Router history={browserHistory} routes={routes} /></Provider>,

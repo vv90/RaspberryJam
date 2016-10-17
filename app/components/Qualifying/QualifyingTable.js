@@ -10,6 +10,10 @@ class QualifyingTable extends React.Component {
 		return event => this.props.onSelection(judgeId, competitor, event.target.checked);
 	}
 
+	isJudgeFinished(judge) {
+		return this.props.selection.countSelected(judge.id) === this.props.selection.numberToPass;
+	}
+
 	render() {
 		return (
 			<table className="table table-compact">
@@ -17,9 +21,11 @@ class QualifyingTable extends React.Component {
 					<tr>
 						<th className="table-column-right"></th>
 						{this.props.judges.map((judge, index) => (
-							<th key={index} className="table-column-centered">
+							<th key={index} className={this.isJudgeFinished(judge)
+								? "table-column-centered text-good"
+								: "table-column-centered"}>
 								<h4>{`(${judge.id}) ${judge.name}`}</h4>
-								<span className="subtext">{`(${this.props.selection.countSelected(judge.id)}/${this.props.numberToPass})`}</span>
+								<span className="subtext">{`(${this.props.selection.countSelected(judge.id)}/${this.props.selection.numberToPass})`}</span>
 							</th>
 						))}
 					</tr>
@@ -28,16 +34,15 @@ class QualifyingTable extends React.Component {
 					{this.props.competitors.map((competitor, index) => (
 						<tr key={index}>
 							<th className="table-column-right">
-								<label>{competitor}</label>
+								<label>{competitor.id}</label>
 							</th>
 							{this.props.judges.map((judge, index) => (
 								<td key={index} className="table-column-centered">
 									<label className="checkbox">
 										<input type="checkbox"
 										       key={index}
-										       value={{judge, competitor}}
-										       checked={this.props.selection[judge.id][competitor]}
-										       onChange={this.getCheckedHandler(judge.id, competitor)}/>
+										       checked={this.props.selection[judge.id][competitor.id]}
+										       onChange={this.getCheckedHandler(judge.id, competitor.id)}/>
 										<span></span>
 									</label>
 								</td>
@@ -53,7 +58,6 @@ QualifyingTable.propTypes = {
 	competitors: PropTypes.array.isRequired,
 	judges: PropTypes.array.isRequired,
 	selection: PropTypes.object.isRequired,
-	numberToPass: PropTypes.number.isRequired,
 	onSelection: PropTypes.func.isRequired
 };
 

@@ -1,30 +1,60 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import { browserHistory } from 'react-router';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+
+import * as competitionWorkflowActions from '../../actions/competitionWorkflowActions';
+import * as notificationActions from '../../actions/notificationActions';
 import {Page, PageHeader, PageContent, PageFooter} from '../Common/Page';
-import QualifyingRound from './QualifyingRound';
+import Box from '../Common/Box';
+import QualifyingTable from './QualifyingTable';
+import {QualifyingSelection} from '../../bl/qualifying';
 
 class Qualifying extends React.Component {
 	constructor(props, context) {
 		super(props, context);
-		const competitors =
-			["10", "21", "52", "8", "24", "42", "13", "22", "3", "18", "54", "35", "40", "37"];
-		const judges = [
-			{ id: "A", name: "John Smith" },
-			{ id: "B", name: "Sarah Scott" },
-			{ id: "C", name: "Sam Johnson" },
-			{ id: "D", name: "Mark Tucker" },
-			{ id: "E", name: "Linda Cox" }
-		];
+
 		this.state = {
-			numberToPass: Math.ceil(competitors.length/2),
-			competitors: competitors,
-			judges: judges
+			selection: new QualifyingSelection(props.judges, props.competitors)
 		};
 
+		this.updateSelection = this.updateSelection.bind(this);
+		this.isSelectionComplete = this.isSelectionComplete.bind(this);
+		this.next = this.next.bind(this);
+	}
+
+	updateSelection(judgeId, competitorId, isSelected) {
+		if (isSelected &&
+			!this.state.selection[judgeId][competitorId] &&
+			this.state.selection.countSelected(judgeId) >= this.state.selection.numberToPass) {
+
+			this.props.notificationActions.showNotification(
+				`Maximum competitors already selected by judge ${judgeId}`, 'warning'
+			);
+
+		} else {
+
+			const selection = new QualifyingSelection(this.props.judges, this.props.competitors)
+				.copySelection(this.state.selection);
+
+			selection[judgeId][competitorId] = isSelected;
+			this.setState({selection: selection});
+		}
+	}
+
+	isSelectionComplete () {
+		return !this.props.judges.find(judge => {
+			return this.state.selection.countSelected(judge.id) !== this.state.selection.numberToPass;
+		});
 	}
 
 	next() {
-		browserHistory.push("/skating");
+		if (!this.isSelectionComplete()) {
+			this.props.notificationActions.showNotification(
+				'Not all judges have finished their selections', 'warning');
+		}
+		// this.props.notificationActions.showNotification("This is a notification", 4000, "warning");
+		// browserHistory.push("/skating");
 	}
 
 	back() {
@@ -35,12 +65,16 @@ class Qualifying extends React.Component {
 		return (
 			<Page>
 				<PageHeader title="Qualifying"
-				            subtitle={`Select ${this.state.numberToPass}/${this.state.competitors.length} to pass to the next round`}/>
+				            subtitle={`Select ${this.state.selection.numberToPass}/${this.props.competitors.length} to pass to the next round`}/>
 				<PageContent>
-					<QualifyingRound competitors={this.state.competitors}
-				                 judges={this.state.judges}
-				                 maxGroupSize={5}
-				                 numberToPass={Math.ceil(this.state.competitors.length/2)} />
+					{this.props.groups.map((group, index) => (
+						<Box key={index} title={`Group ${index + 1}`} >
+							<QualifyingTable competitors={group}
+							                 judges={this.props.judges}
+							                 selection={this.state.selection}
+							                 onSelection={this.updateSelection}/>
+						</Box>
+					))}
 				</PageContent>
 				<PageFooter>
 					<button type="button" className="button" onClick={this.back}>Back</button>
@@ -51,4 +85,27 @@ class Qualifying extends React.Component {
 	}
 }
 
-export default Qualifying;
+Qualifying.propTypes = {
+	competitors: PropTypes.array.isRequired,
+	judges: PropTypes.array.isRequired,
+	groups: PropTypes.array.isRequired,
+	workflowActions: PropTypes.object.isRequired,
+	notificationActions: PropTypes.object.isRequired
+};
+
+function mapStateToProps(state, ownProps) {
+	return {
+		competitors: state.competitionWorkflow.competitors,
+		judges: state.competitionWorkflow.judges,
+		groups: state.competitionWorkflow.groups
+	};
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		workflowActions: bindActionCreators(competitionWorkflowActions, dispatch),
+		notificationActions: bindActionCreators(notificationActions, dispatch)
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Qualifying);

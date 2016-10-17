@@ -37,32 +37,32 @@ class Registration extends React.Component {
 
 	populateMockData() {
 		const competitors = [
-			{ leader: "Andrew Smith", follower: "Jacqueline Long"},
-			{ leader: "Randy Webb", follower: "Marie Miller"},
-			{ leader: "Jeremy Barnes", follower: "Lori Alexander"},
-			{ leader: "Ryan Burns", follower: "Kelly Reid"},
-			{ leader: "Douglas Allen", follower: "Anna Myers"},
-			{ leader: "Brian Kelley", follower: "Carol Hill"},
-			{ leader: "Donald Day", follower: "Lisa Hart"},
-			{ leader: "Terry Brooks", follower: "Ruby Black"},
-			{ leader: "Raymond James", follower: "Dorothy Peters"},
-			{ leader: "Larry Thompson", follower: "Gloria Morris"},
-			{ leader: "Martin Carr", follower: "Donna Mcdonald"},
-			{ leader: "Carlos Hill", follower: "Jessica Fields"},
-			{ leader: "Charles Montgomery", follower: "Joyce Myers"},
-			{ leader: "Andrew Brooks", follower: "Evelyn Cook"},
-			{ leader: "Roger Ford", follower: "Betty Hudson"},
-			{ leader: "Johnny Sanders", follower: "Michelle Dunn"},
-			{ leader: "Ralph Smith", follower: "Pamela Hanson"},
-			{ leader: "Aaron Campbell", follower: "Rachel Ellis"},
-			{ leader: "Dennis Ramirez", follower: "Helen Young"},
-			{ leader: "Gerald Ellis", follower: "Kathy Howard"},
-			{ leader: "Steve Miller", follower: "Carolyn Murray"},
-			{ leader: "James Taylor", follower: "Michelle Wells"},
-			{ leader: "Justin Owens", follower: "Donna Grant"},
-			{ leader: "Eugene Webb", follower: "Jennifer Bryant"},
-			{ leader: "Ernest Holmes", follower: "Kelly Ferguson"},
-			{ leader: "Brian Snyder", follower: "Paula Woods"},
+			{ id: 1, leader: "Andrew Smith", follower: "Jacqueline Long"},
+			{ id: 2, leader: "Randy Webb", follower: "Marie Miller"},
+			{ id: 3, leader: "Jeremy Barnes", follower: "Lori Alexander"},
+			{ id: 4, leader: "Ryan Burns", follower: "Kelly Reid"},
+			{ id: 5, leader: "Douglas Allen", follower: "Anna Myers"},
+			{ id: 6, leader: "Brian Kelley", follower: "Carol Hill"},
+			{ id: 7, leader: "Donald Day", follower: "Lisa Hart"},
+			{ id: 8, leader: "Terry Brooks", follower: "Ruby Black"},
+			{ id: 9, leader: "Raymond James", follower: "Dorothy Peters"},
+			{ id: 10 ,leader: "Larry Thompson", follower: "Gloria Morris"},
+			{ id: 11 ,leader: "Martin Carr", follower: "Donna Mcdonald"},
+			{ id: 12 ,leader: "Carlos Hill", follower: "Jessica Fields"},
+			{ id: 13 ,leader: "Charles Montgomery", follower: "Joyce Myers"},
+			{ id: 14 ,leader: "Andrew Brooks", follower: "Evelyn Cook"},
+			{ id: 15 ,leader: "Roger Ford", follower: "Betty Hudson"},
+			{ id: 16 ,leader: "Ralph Smith", follower: "Pamela Hanson"},
+			{ id: 17 ,leader: "Aaron Campbell", follower: "Rachel Ellis"},
+			{ id: 18 ,leader: "Dennis Ramirez", follower: "Helen Young"},
+			{ id: 19 ,leader: "Gerald Ellis", follower: "Kathy Howard"},
+			{ id: 20 ,leader: "Steve Miller", follower: "Carolyn Murray"},
+			{ id: 21 ,leader: "James Taylor", follower: "Michelle Wells"},
+			{ id: 22 ,leader: "Justin Owens", follower: "Donna Grant"},
+			{ id: 23 ,leader: "Eugene Webb", follower: "Jennifer Bryant"},
+			{ id: 24 ,leader: "Ernest Holmes", follower: "Kelly Ferguson"},
+			{ id: 25 ,leader: "Johnny Sanders", follower: "Michelle Dunn"},
+			{ id: 26 ,leader: "Brian Snyder", follower: "Paula Woods"},
 		];
 
 		this.setState({competitors: competitors});
@@ -109,7 +109,7 @@ class Registration extends React.Component {
 	}
 
 	next() {
-		this.props.actions.submitRegistrationStep(this.state.competitors);
+		this.props.workflowActions.submitRegistrationStep(this.state.competitors);
 		browserHistory.push("/qualifying");
 	}
 
@@ -148,7 +148,7 @@ class Registration extends React.Component {
 
 Registration.propTypes = {
 	competitorsInit: PropTypes.array.isRequired,
-	actions: PropTypes.object.isRequired
+	workflowActions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
@@ -159,7 +159,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		actions: bindActionCreators(competitionWorkflowActions, dispatch)
+		workflowActions: bindActionCreators(competitionWorkflowActions, dispatch)
 	};
 }
 

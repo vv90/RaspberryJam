@@ -23,7 +23,7 @@ class RegistrationTable extends React.Component {
 				{this.props.competitors.map((item, index) => {
 					return (
 						<tr key={index}>
-							<td>{index + 1}</td>
+							<td>{item.id}</td>
 							<td>{item.leader}</td>
 							<td>{item.follower}</td>
 							<td className="table-column-right">

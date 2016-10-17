@@ -3,9 +3,11 @@
  */
 import {combineReducers} from 'redux';
 import competitionWorkflowReducer from './competitionWorkflowReducer';
+import notificationReducer from './notificationReducer';
 
 const rootReducer = combineReducers({
-	competitionWorkflow: competitionWorkflowReducer
+	competitionWorkflow: competitionWorkflowReducer,
+	notifications: notificationReducer
 });
 
 export default rootReducer;
