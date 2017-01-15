@@ -8,10 +8,10 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var webpack = require('webpack');
 var webpackConfig = require('../webpack.config.dev');
-
+var dancersParser = require('./excelParser');
 
 var app = express();
-var port = 8080;
+var port = 8081;
 
 app.use(require('webpack-dev-middleware')(webpack(webpackConfig), {
 	publicPath: webpackConfig.output.publicPath,
@@ -30,6 +30,13 @@ router.use(function (req, res, next) {
 
 router.get('/', function(req, res) {
 	res.json({message: 'api is working'});
+});
+
+router.get('/parse', function(req, res) {
+	var parser = new dancersParser.TableParser('dancers.xlsm');
+	parser.init();
+	var result = parser.readDancers();
+	res.json(parser.isMetadataCorrect() ? result : parser.errors);
 });
 
 mongoose.connect('mongodb://localhost/RaspberryJam');
