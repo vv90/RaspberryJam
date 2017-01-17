@@ -20,57 +20,22 @@ function TableParser (path) {
 	this.path = path;
 }
 
-TableParser.prototype.sheetsMetadata = [
-	{
-		name: "техническое"
-	},
-	{
-		name: "организаторам"
-	},
-	{
-		name: "клубы"
-	},
-	{
-		name: "история классов"
-	},
-	{
+TableParser.prototype.sheetsMetadata = {
+	dancersList: {
 		name: "список танцоров",
+		headingRow: 2,
 		columns: {
-			A2: "Код",
-			B2: "Фамилия Имя",
-			D2: "Прежняя фамилия",
-			E2: "Клуб",
-			F2: "Текущ. класс",
-			G2: "Класс ДнД",
-			H2: "Пол",
-			I2: "Источник",
-			J2: "дубль ФИ",
-			K2: "Дубл кода",
-			L2: "Новые переводы"
+			id: {col: 'A', value: "Код"},
+			fullName: {col: 'B', value: "Фамилия Имя"},
+			club: {col: 'E', value: "Клуб"},
+			class: {col: 'F', value: "Текущ. класс"},
+			classJnJ: {col: 'G', value: "Класс ДнД"},
+			sex: {col: 'H', value: "Пол"},
+			source: {col: 'I', value: "Источник"}
 		}
-	},
-	{
-		name: "rating"
-	},
-	{
-		name: "rating ДнД"
-	},
-	{
-		name: "новые переводы"
-	},
-	{
-		name: "как читать результат"
-	},
-	{
-		name: "баллы ECBA-DnD"
-	},
-	{
-		name: "баллы D"
-	},
-	{
-		name: "баллы Star"
 	}
-];
+};
+
 
 TableParser.prototype.init = function () {
 	var self = this;
@@ -78,23 +43,26 @@ TableParser.prototype.init = function () {
 
 	var errors = [];
 
-	this.workbook.SheetNames.forEach(function (sheetName, index) {
-		var sheetMetadata = self.sheetsMetadata[index];
+	Object.keys(this.sheetsMetadata).forEach(function (sheetKey) {
+		var sheetMetadata = self.sheetsMetadata[sheetKey];
+		var sheet = self.workbook.Sheets[sheetMetadata.name];
 
-		if (sheetName !== sheetMetadata.name) {
-			errors.push(formatError("Incorrect sheet name at position " + index,
-				sheetMetadata.name,
-				sheetName));
+		if (!sheet) {
+			errors.push(formatError("Missing sheet", sheetMetadata.name));
+		}
 
-		} else if (sheetMetadata.columns) {
-			var sheet = self.workbook.Sheets[sheetName];
-			Object.keys(sheetMetadata.columns).forEach(function (column) {
-				var cell = sheet[column];
+		if (sheetMetadata.columns) {
+			Object.keys(sheetMetadata.columns).forEach(function (columnKey) {
+				var columnMetadata = sheetMetadata.columns[columnKey];
+				var cell = sheet[columnMetadata.col + sheetMetadata.headingRow];
 
 				if(!cell) {
-					errors.push(formatError("Missing cell", { column: column, value: sheetMetadata.columns[column] }));
-				} else if (sheetMetadata.columns[column] !== cell.v.replace(/\w+/, ' ')) {
-					errors.push(formatError("Incorrect cell", sheetMetadata.columns[column], cell.v.replace(/\w+/, ' ')));
+					errors.push(formatError("Missing cell", sheetMetadata.columns[columnKey]));
+				} else {
+					var cellValue = cell.v.replace(/[\r\n\s]+/, ' ');
+					if (columnMetadata.value !== cellValue) {
+						errors.push(formatError("Incorrect cell", columnMetadata.value, cellValue));
+					}
 				}
 			});
 		}
@@ -105,8 +73,22 @@ TableParser.prototype.init = function () {
 
 TableParser.prototype.readDancers = function() {
 
+	var sheet = this.workbook.Sheets[this.sheetsMetadata.dancersList.name];
+	var sheetMeta = this.sheetsMetadata.dancersList;
+	var result = [];
 
-	return { sheetNames: this.workbook.SheetNames };
+	var row = sheetMeta.headingRow + 1;
+	while(sheet[sheetMeta.columns.id.col + row]) {
+		var rowObj = {};
+		Object.keys(this.sheetsMetadata.dancersList.columns).forEach(function (columnKey) {
+			rowObj[columnKey] = sheet[sheetMeta.columns[columnKey].col + row].v;
+		});
+		result.push(rowObj);
+		row += 1;
+	}
+
+
+	return result;
 };
 
 TableParser.prototype.isMetadataCorrect = function() {

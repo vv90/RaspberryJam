@@ -9,6 +9,7 @@ var path = require('path');
 var webpack = require('webpack');
 var webpackConfig = require('../webpack.config.dev');
 var dancersParser = require('./excelParser');
+var dancerSchema = require('./schema/dancer').dancer;
 
 var app = express();
 var port = 8081;
@@ -29,7 +30,7 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', function(req, res) {
-	res.json({message: 'api is working'});
+	res.json(dancerSchema);
 });
 
 router.get('/parse', function(req, res) {
@@ -40,6 +41,10 @@ router.get('/parse', function(req, res) {
 });
 
 mongoose.connect('mongodb://localhost/RaspberryJam');
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {});
 
 app.use('/api', router);
 app.get('*', function(req, res) {
