@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/server.js",
+    "dev": "babel-node server/server.js",
     "test": "mocha --reporter progress server/testSetup.js app/**/*.test.js",
     "test:watch": "npm run test -- --watch"
   },

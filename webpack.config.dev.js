@@ -1,8 +1,11 @@
 /**
  * Created by Vladimir on 9/10/2016.
  */
-var webpack = require('webpack');
-module.exports = {
+// var webpack = require('webpack');
+
+import webpack from 'webpack';
+
+export default {
 	debug: true,
 	devtool: "source-map",//"cheap-module-eval-source-map",
 	entry: [
